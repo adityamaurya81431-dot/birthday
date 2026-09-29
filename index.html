@@ -399,8 +399,23 @@
             </audio>
         </div>
         
-        <!-- 👇 Button added here for the last slide 👇 -->
-        <button class="btn-primary mt-8" onclick="nextScreen('screen-final', 'screen-epilogue')">Wait, I have one last memory to show you... 🥺</button>
+        <!-- 👇 Button changed to go to the Shayari slide first 👇 -->
+        <button class="btn-primary mt-8" onclick="nextScreen('screen-final', 'screen-video-shayari')">Wait, I have something more to show you... 🥺</button>
+    </div>
+
+    <!-- NEW: Shayari Video Screen -->
+    <div id="screen-video-shayari" class="screen">
+        <h2 style="color: #ff4757; font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 15px;">Babbbbbyyy aapke liye ek choti si shayari..hehe 🙈❤️</h2>
+        
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "shayari.mp4" TO YOUR SHAYARI VIDEO'S NAME 👇 -->
+                <source src="din bhi aap ho mera.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <button class="btn-primary mt-6" onclick="nextScreen('screen-video-shayari', 'screen-epilogue')">One last memory... 🥺</button>
     </div>
 
     <!-- Epilogue Screen -->
@@ -423,6 +438,15 @@
         </div>
         
         <p class="text-2xl text-pink-600 font-bold mt-8" style="font-family: 'Dancing Script', cursive;">I love you, forever and always.<br>Happy Birthday Miss India! ❤️</p>
+        
+        <!-- NEW: Thank You & Mailbox Section -->
+        <div class="mt-12 p-6" style="background: rgba(255, 234, 239, 0.8); border-radius: 15px; border: 2px dashed #ff9a9e; box-shadow: 0 4px 15px rgba(255, 105, 135, 0.1);">
+            <p class="text-xl text-gray-800 font-medium mb-5" style="line-height: 1.6;">
+                THANK you Nandini for chosing to be mine..........<br><br>
+                <span class="text-lg italic text-pink-700">If youu liked this then drop a message in the mail box ..</span>
+            </p>
+            <a href="mailto:adityamaurya81431@gmail.com?subject=My%20Birthday%20Gift%20Response!%20%E2%9D%A4%EF%B8%8F" class="btn-primary" style="text-decoration: none; display: inline-block; padding: 12px 25px;">Open Mailbox 💌</a>
+        </div>
     </div>
 
     <script>
