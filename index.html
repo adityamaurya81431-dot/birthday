@@ -153,6 +153,8 @@
         .polaroid:nth-child(1) { transform: rotate(-4deg); }
         .polaroid:nth-child(2) { transform: rotate(3deg); }
         .polaroid:nth-child(3) { transform: rotate(-2deg); }
+        .polaroid:nth-child(4) { transform: rotate(4deg); }
+        .polaroid:nth-child(5) { transform: rotate(-3deg); }
         .polaroid:hover { transform: scale(1.08) rotate(0deg); z-index: 10; box-shadow: 0 12px 25px rgba(0,0,0,0.2); }
         .polaroid img { width: 180px; height: 180px; object-fit: cover; border: 1px solid #eee; background: #f0f0f0; }
 
@@ -167,7 +169,7 @@
 
     <div id="screen-welcome" class="screen active">
         <h1>Happy Birthday!</h1>
-        <p class="text-lg text-gray-700 mb-6 font-medium">BABBBYYYY..I made something special for you. But to unlock your gift, you have to complete our 12-step journey (6 games & 6 quizzes)!All the Bestttt</p>
+        <p class="text-lg text-gray-700 mb-6 font-medium">BABBBYYYY..I made something special for you. But to unlock your gift, you have to complete our 12-step journey (6 games & 6 quizzes)! All the Bestttt</p>
         <button class="btn-primary" onclick="startGame()">Start The Journey 💖</button>
     </div>
 
@@ -185,7 +187,7 @@
         <button class="trivia-btn" onclick="wrongAnswer(this)">20</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">30</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">40</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz1', 'screen-game2')">Kabhi count nhi kari babby</button>
+        <button class="trivia-btn" onclick="nextScreen('screen-quiz1', 'screen-video1')">Kabhi count nhi kari babby</button>
     </div>
 
     <!-- Game 2: Catch Hearts -->
@@ -202,7 +204,7 @@
         <p class="mb-6 text-xl text-gray-700">Mujhe(Aditya) aapke ghar ka address kaise pata chala?</p>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Pandey se</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Follow Kiya tha chupke</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz2', 'screen-game3')">Are maine (Miss India ) hi toh paper pe map draw karke smjhaya tha</button>
+        <button class="trivia-btn" onclick="nextScreen('screen-quiz2', 'screen-video2')">Are maine (Miss India ) hi toh paper pe map draw karke smjhaya tha</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Batman hu mai apne aap pata chal gaya mujhe</button>
     </div>
 
@@ -225,7 +227,7 @@
         <button class="trivia-btn" onclick="wrongAnswer(this)">Padhne ki</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Sone jane ki</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Match dekhne Jane ki</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz3', 'screen-game4')">Dadi chai bana rahi hongi ..peene jana hoga</button>
+        <button class="trivia-btn" onclick="nextScreen('screen-quiz3', 'screen-video3')">Dadi chai bana rahi hongi ..peene jana hoga</button>
     </div>
 
     <!-- Game 4: Catch the Kiss -->
@@ -242,7 +244,7 @@
         <h2>Quiz 4/6</h2>
         <p class="mb-6 text-xl text-gray-700">Meri non existing unrealistic gf ka naam kya tha?</p>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Shalini</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz4', 'screen-game5')">Shreya</button>
+        <button class="trivia-btn" onclick="nextScreen('screen-quiz4', 'screen-video4')">Shreya</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Priya</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Ham pe toh hai hi no thi</button>
     </div>
@@ -280,8 +282,82 @@
         <h2>Quiz 6/6</h2>
         <p class="mb-6 text-xl text-gray-700">Final Question: Who loves who more?</p>
         <button class="trivia-btn" onclick="wrongAnswer(this)">You love Aditya more</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz6', 'screen-final')">Aditya loves you more ❤️</button>
+        <!-- Notice this now goes to 'screen-video5' instead of final -->
+        <button class="trivia-btn" onclick="nextScreen('screen-quiz6', 'screen-video5')">Aditya loves you more ❤️</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">We love each other equally</button>
+    </div>
+
+    <!-- Video Screen 1 -->
+    <div id="screen-video1" class="screen">
+        <h2>Chatpata video 1 of Miss INDIA ❤️</h2>
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "video1.mp4" TO YOUR 1ST VIDEO'S NAME 👇 -->
+                <source src="jab we met.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Watch this before your next challenge...</p>
+        <button class="btn-primary" onclick="nextScreen('screen-video1', 'screen-game2')">Continue Journey 💖</button>
+    </div>
+
+    <!-- Video Screen 2 -->
+    <div id="screen-video2" class="screen">
+        <h2>Chatpata video 2 of Miss INDIA❤️</h2>
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "video2.mp4" TO YOUR 2ND VIDEO'S NAME 👇 -->
+                <source src="aap kaun.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Reliving the cute moments...</p>
+        <button class="btn-primary" onclick="nextScreen('screen-video2', 'screen-game3')">Continue Journey 💖</button>
+    </div>
+
+    <!-- Video Screen 3 -->
+    <div id="screen-video3" class="screen">
+        <h2>Mesmerising Clip of My Miss India❤️</h2>
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "video3.mp4" TO YOUR 3RD VIDEO'S NAME 👇 -->
+                <source src="terrace video.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Another beautiful memory...</p>
+        <button class="btn-primary" onclick="nextScreen('screen-video3', 'screen-game4')">Continue Journey 💖</button>
+    </div>
+
+    <!-- Video Screen 4 -->
+    <div id="screen-video4" class="screen">
+        <h2>Simple video made by me</h2>
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "video4.mp4" TO YOUR 4TH VIDEO'S NAME 👇 -->
+                <source src="prettly little babby.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Almost at the end! Watch this...</p>
+        <button class="btn-primary" onclick="nextScreen('screen-video4', 'screen-game5')">Continue Journey 💖</button>
+    </div>
+
+    <!-- Special Video Screen 5 -->
+    <div id="screen-video5" class="screen">
+        <h2>Babbbyyy I Love youuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu ❤</h2>
+        
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "birthday.mp4" TO YOUR 5TH VIDEO'S NAME 👇 -->
+                <source src="i love you light.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Watch this before your final surprise...</p>
+        
+        <button class="btn-primary" onclick="nextScreen('screen-video5', 'screen-final')">See Your Final Gift 🎁</button>
     </div>
 
     <!-- Final Celebration Screen -->
@@ -297,37 +373,24 @@
             <p>"Yaar ye phatphatiya kitni awaz karti hai pasand nhi hai hame"...........<br>hamari fiirst day talk thi babbbyy aur ab dekhooo-</p>
         </div>
 
-        <!-- 👇 ADD YOUR PHOTOS HERE 👇 -->
         <p class="mt-8 text-pink-500 font-semibold italic">Our beautiful memories... ❤️</p>
         <div class="gallery">
-            
             <div class="polaroid">
-                <!-- Photo 1: Your specific first image -->
                 <img src="me and miss collage.jpeg" alt="Our Memory" onerror="this.src='https://placehold.co/300x300/ff9a9e/ffffff?text=Photo+1'">
             </div>
-            
             <div class="polaroid">
-                <!-- Photo 2: Replace 'photo2.jpg' with your actual file name -->
                 <img src="birthday.jpeg" alt="Us together" onerror="this.src='https://placehold.co/300x300/fecfef/ff4757?text=Photo+2'">
             </div>
-            
             <div class="polaroid">
-                <!-- Photo 3: Replace 'photo3.jpg' with your actual file name -->
                 <img src="Me and miss engagement.jpeg" alt="Sweet memory" onerror="this.src='https://placehold.co/300x300/ffeaa7/e17055?text=Photo+3'">
             </div>
-
             <div class="polaroid">
-                <!-- Photo 4: Replace 'photo4.jpg' with your actual file name -->
                 <img src="Me and miss in jai jagat park.jpeg" alt="Cute memory" onerror="this.src='https://placehold.co/300x300/a29bfe/ffffff?text=Photo+4'">
             </div>
-
             <div class="polaroid">
-                <!-- Photo 5: Replace 'photo5.jpg' with your actual file name -->
                 <img src="me and miss sitting together.jpeg" alt="Forever memory" onerror="this.src='https://placehold.co/300x300/81ecec/2d3436?text=Photo+5'">
             </div>
-
         </div>
-        <!-- 👆 ADD YOUR PHOTOS HERE 👆 -->
 
         <div class="music-player">
             <p class="text-sm text-gray-600 mb-2 font-semibold">🎵 Playing: Duniyaa by Akhil</p>
@@ -335,6 +398,31 @@
                 <source src="duniyaa-akhil.mp3" type="audio/mpeg">
             </audio>
         </div>
+        
+        <!-- 👇 Button added here for the last slide 👇 -->
+        <button class="btn-primary mt-8" onclick="nextScreen('screen-final', 'screen-epilogue')">Wait, I have one last memory to show you... 🥺</button>
+    </div>
+
+    <!-- Epilogue Screen -->
+    <div id="screen-epilogue" class="screen">
+        <h2 style="color: #ff4757; font-family: 'Dancing Script', cursive; font-size: 2.5rem;">A Throwback to Last Year... 🥺</h2>
+        <p class="text-lg text-gray-700 mb-6">Even when we were apart, my heart was always with you. Do you remember this?</p>
+        
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <!-- 👇 CHANGE "last-bday-chat.jpg" TO YOUR SCREENSHOT'S NAME 👇 -->
+            <img src="wish chat.jpeg" alt="Last Birthday Chat" style="width: 100%; height: auto; display: block;" onerror="this.src='https://placehold.co/600x400/ffeaa7/e17055?text=Chat+Screenshot'">
+        </div>
+
+        <h3 style="color: #e17055; font-family: 'Dancing Script', cursive; font-size: 2rem; margin-top: 30px; margin-bottom: 15px;">And this little video I sent you...</h3>
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video width="100%" controls playsinline>
+                <!-- 👇 CHANGE "last-bday-video.mp4" TO YOUR VIDEO'S NAME 👇 -->
+                <source src="in my story.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <p class="text-2xl text-pink-600 font-bold mt-8" style="font-family: 'Dancing Script', cursive;">I love you, forever and always.<br>Happy Birthday Miss India! ❤️</p>
     </div>
 
     <script>
@@ -361,13 +449,34 @@
             window.scrollTo(0, 0);
 
             // Initialize respective game logic when the screen loads
-            if(nextId === 'screen-game1') initMemoryGame();
-            if(nextId === 'screen-game2') initCatchGame();
-            if(nextId === 'screen-game6') initBalloonGame();
+        if(nextId === 'screen-game1') initMemoryGame();
+        if(nextId === 'screen-game2') initCatchGame();
+        if(nextId === 'screen-game6') initBalloonGame();
+
+        // Handle Video and Music Playback Logic
+        const bgMusic = document.getElementById('bg-music');
+        
+        // Pause all videos when leaving a screen
+        document.querySelectorAll('video').forEach(v => v.pause());
+
+        // Pause the final audio player if moving to the epilogue
+        if(currentId === 'screen-final') {
+            document.getElementById('final-audio-controls').pause();
         }
 
-        // Logic for handling incorrect quiz answers
-        function wrongAnswer(btn) {
+        if (nextId.startsWith('screen-video') || nextId === 'screen-epilogue') {
+            // Pause background music so she can hear the video
+            bgMusic.pause();
+            // Play the video for this specific screen automatically
+            const video = document.getElementById(nextId).querySelector('video');
+            if (video) video.play().catch(e => console.log("Video autoplay blocked by browser."));
+        } else if (nextId !== 'screen-welcome') {
+            // Resume the background music
+            bgMusic.play().catch(e => console.log("Audio resume blocked."));
+        }
+    }
+
+    function wrongAnswer(btn) {
             btn.classList.add('shake', 'trivia-wrong');
             const originalText = btn.innerText;
             btn.innerText = "Oops! Try again 🙊";
@@ -461,7 +570,6 @@
                 };
                 area.appendChild(heart);
                 
-                // Trigger falling animation
                 setTimeout(() => { if (heart) heart.style.top = '300px'; }, 50);
                 setTimeout(() => { if(heart.parentElement) heart.remove(); }, 2550);
             }, 700); 
@@ -481,7 +589,6 @@
 
         function dodgeKiss() {
             const btn = document.getElementById('catch-kiss-btn');
-            // Random position inside the interactive area container bounds
             const newTop = Math.random() * 60 + 10;
             const newLeft = Math.random() * 60 + 10;
             btn.style.top = newTop + '%';
@@ -530,7 +637,6 @@
                 };
                 area.appendChild(balloon);
                 
-                // Trigger floating animation
                 setTimeout(() => { if (balloon) balloon.style.bottom = '300px'; }, 50);
                 setTimeout(() => { if(balloon.parentElement) balloon.remove(); }, 3050);
             }, 800); 
