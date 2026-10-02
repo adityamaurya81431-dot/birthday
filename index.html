@@ -159,6 +159,16 @@
         .polaroid img { width: 180px; height: 180px; object-fit: cover; border: 1px solid #eee; background: #f0f0f0; }
 
         .music-player { margin-top: 30px; padding: 15px; background: rgba(255,255,255,0.8); border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        /* NEW STYLES FOR GAME 3 & 5 */
+        .hb-container { position:relative; width:100%; max-width:300px; height:60px; background:rgba(255,255,255,0.6); margin:20px auto; border-radius:30px; border:2px solid #ff9a9e; overflow:hidden; }
+        .hb-target { position:absolute; left:30%; width:40%; height:100%; background:rgba(255,71,87,0.3); border-left:2px dashed #ff4757; border-right:2px dashed #ff4757; }
+        .hb-heart { position:absolute; left:0; top:12px; font-size:28px; transition: left 0.05s linear; }
+        
+        .simon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-width: 400px; margin: 20px auto; }
+        .simon-btn { height: 90px; border-radius: 20px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s, filter 0.1s; border: 4px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display:flex; justify-content:center; align-items:center; font-size:2.5rem; }
+        .simon-btn:active { transform: scale(0.90); }
+        .simon-lit { filter: brightness(1.5) contrast(1.2); box-shadow: 0 0 25px rgba(255,255,255,1); transform: scale(1.15); border-color: white !important; }
     </style>
 </head>
 <body>
@@ -166,9 +176,37 @@
     <audio id="bg-music" loop>
         <source src="duniyaa-akhil.mp3" type="audio/mpeg">
     </audio>
+    
+    <!-- NEW: Hurrah Celebration Sound -->
+    <audio id="hurrah-audio">
+        <source src="hurrah.mp3" type="audio/mpeg">
+    </audio>
 
-    <div id="screen-welcome" class="screen active">
-        <h1>Happy Birthday!</h1>
+    <!-- NEW: Very First "Tap to Open" Screen -->
+    <div id="screen-start-gate" class="screen active" style="margin-top: 20vh;">
+        <h1 class="text-5xl md:text-6xl drop-shadow-sm mb-6" style="color: #ff4757;">For My Love... ❤️</h1>
+        <p class="text-xl text-gray-700 mb-8 font-medium">I made something special just for you.</p>
+        <button class="btn-primary" style="padding: 20px 40px; font-size: 1.5rem; animation: pulse 2s infinite;" onclick="startBirthdaySurprise()">Tap to Open Gift 🎁</button>
+    </div>
+
+    <!-- Intro Video Screen (Now happens after they tap to open) -->
+    <div id="screen-intro-video" class="screen">
+        <h1 class="text-4xl md:text-5xl drop-shadow-sm mb-4" style="color: #ff4757;">Happy Birthday Babby! 🎉</h1>
+        <p class="text-lg text-gray-700 mb-6 font-medium">A little surprise to start your special day...</p>
+        
+        <div style="margin: 20px auto; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+            <video id="intro-video-element" width="100%" controls playsinline>
+                <!-- 👇 CHANGE "intro.mp4" TO YOUR INTRO VIDEO'S NAME 👇 -->
+                <source src="Happy Birthday.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <button class="btn-primary mt-6" onclick="transitionToWelcome()">See What's Next 🎁</button>
+    </div>
+
+    <div id="screen-welcome" class="screen">
+        <h1>Welcome!</h1>
         <p class="text-lg text-gray-700 mb-6 font-medium">BABBBYYYY..I made something special for you. But to unlock your gift, you have to complete our 12-step journey (6 games & 6 quizzes)! All the Bestttt</p>
         <button class="btn-primary" onclick="startGame()">Start The Journey 💖</button>
     </div>
@@ -187,7 +225,7 @@
         <button class="trivia-btn" onclick="wrongAnswer(this)">20</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">30</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">40</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz1', 'screen-video1')">Kabhi count nhi kari babby</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz1', 'screen-video1')">Kabhi count nhi kari babby</button>
     </div>
 
     <!-- Game 2: Catch Hearts -->
@@ -204,20 +242,20 @@
         <p class="mb-6 text-xl text-gray-700">Mujhe(Aditya) aapke ghar ka address kaise pata chala?</p>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Pandey se</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Follow Kiya tha chupke</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz2', 'screen-video2')">Are maine (Miss India ) hi toh paper pe map draw karke smjhaya tha</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz2', 'screen-video2')">Are maine (Miss India ) hi toh paper pe map draw karke smjhaya tha</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Batman hu mai apne aap pata chal gaya mujhe</button>
     </div>
 
-    <!-- Game 3: Scavenger Hunt -->
+    <!-- Game 3: Sync Our Hearts -->
     <div id="screen-game3" class="screen">
-        <h2>Game 3/6: Scavenger Hunt</h2>
-        <p class="text-gray-600">Find the hidden 🎁, 🎂, and 💌 in the area below.</p>
-        <p class="font-bold text-pink-600 text-lg mt-2">Found: <span id="scavenger-score">0</span>/3</p>
-        <div id="scavenger-area" class="interactive-area scavenger-area">
-            <div class="hidden-item" style="top: 15%; left: 20%;" onclick="findItem(this)">🎁</div>
-            <div class="hidden-item" style="top: 65%; left: 70%;" onclick="findItem(this)">🎂</div>
-            <div class="hidden-item" style="top: 40%; left: 45%;" onclick="findItem(this)">💌</div>
+        <h2>Game 3/6: Sync Our Hearts</h2>
+        <p class="text-gray-600">Tap "SYNC" when the moving heart is inside the target box. <br>(Don't worry, there's no penalty if you miss!)</p>
+        <div id="hb-wrap" class="hb-container">
+            <div class="hb-target"></div>
+            <div id="hb-heart" class="hb-heart">❤️</div>
         </div>
+        <p class="font-bold text-pink-600 text-lg mt-2">Synced: <span id="sync-score">0</span>/3</p>
+        <button class="btn-primary mt-4" onclick="checkSync()">SYNC ❤️</button>
     </div>
 
     <!-- Quiz 3 -->
@@ -227,7 +265,7 @@
         <button class="trivia-btn" onclick="wrongAnswer(this)">Padhne ki</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Sone jane ki</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Match dekhne Jane ki</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz3', 'screen-video3')">Dadi chai bana rahi hongi ..peene jana hoga</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz3', 'screen-video3')">Dadi chai bana rahi hongi ..peene jana hoga</button>
     </div>
 
     <!-- Game 4: Catch the Kiss -->
@@ -244,26 +282,41 @@
         <h2>Quiz 4/6</h2>
         <p class="mb-6 text-xl text-gray-700">Meri non existing unrealistic gf ka naam kya tha?</p>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Shalini</button>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz4', 'screen-video4')">Shreya</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz4', 'screen-video4')">Shreya</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Priya</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Ham pe toh hai hi no thi</button>
     </div>
 
-    <!-- Game 5: Word Scramble -->
+    <!-- Game 5: Cupid's Sequence -->
     <div id="screen-game5" class="screen">
-        <h2>Game 5/6: Word Scramble</h2>
-        <p class="text-gray-600 text-lg mb-4">Unscramble this word: <strong class="text-3xl text-pink-600 block my-4 tracking-widest">E V O L</strong></p>
-        <input type="text" id="scramble-input" class="border-2 border-pink-300 rounded-full px-4 py-2 text-center text-xl w-48 mb-4 uppercase focus:outline-none focus:border-pink-500" placeholder="Type here...">
-        <br>
-        <p id="scramble-error" class="text-red-500 font-semibold mb-2 hidden">Oops, try again!</p>
-        <button class="btn-primary mt-0" onclick="checkScramble()">Submit</button>
+        <h2>Game 5/6: Cupid's Sequence</h2>
+        
+        <div style="background: rgba(255, 154, 158, 0.15); border: 2px dashed #ff9a9e; padding: 15px; border-radius: 15px; margin-bottom: 20px; text-align: left; font-size: 0.95rem; color: #574b90;">
+            <b>How to play, Babby:</b><br>
+            1. Watch the hearts carefully! When you click Start, one heart will light up.<br>
+            2. When it says "Your Turn!", tap that exact heart.<br>
+            3. It will add one more heart each level. Remember the sequence! If you make a mistake, it will automatically replay for you. ❤️
+        </div>
+
+        <div id="simon-grid-container" class="simon-grid">
+            <div class="simon-btn" id="simon-0" onclick="tapSimon(0)" style="background:#ff9a9e;">🩷</div>
+            <div class="simon-btn" id="simon-1" onclick="tapSimon(1)" style="background:#a29bfe;">💜</div>
+            <div class="simon-btn" id="simon-2" onclick="tapSimon(2)" style="background:#ffeaa7;">💛</div>
+            <div class="simon-btn" id="simon-3" onclick="tapSimon(3)" style="background:#81ecec;">🩵</div>
+            <div class="simon-btn" id="simon-4" onclick="tapSimon(4)" style="background:#55efc4;">💚</div>
+            <div class="simon-btn" id="simon-5" onclick="tapSimon(5)" style="background:#fab1a0;">🧡</div>
+            <div class="simon-btn" id="simon-6" onclick="tapSimon(6)" style="background:#ff7675;">❤️</div>
+            <div class="simon-btn" id="simon-7" onclick="tapSimon(7)" style="background:#74b9ff;">💙</div>
+        </div>
+        <p class="font-bold text-pink-600 text-lg mt-2">Level: <span id="simon-level">1</span>/5 <br><span id="simon-status" class="text-sm font-semibold mt-1 inline-block" style="color: #8e44ad;">Press Start to begin!</span></p>
+        <button id="simon-start-btn" class="btn-primary mt-4" onclick="startSimon()">Start Sequence</button>
     </div>
 
     <!-- Quiz 5 -->
     <div id="screen-quiz5" class="screen">
         <h2>Quiz 5/6</h2>
         <p class="mb-6 text-xl text-gray-700">Since how many days we know each other?</p>
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz5', 'screen-game6')">More than 3000 days</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz5', 'screen-game6')">More than 3000 days</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">Less than 3000 days</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">More than 2000 days less than 3000 days</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">I don't know</button>
@@ -283,8 +336,15 @@
         <p class="mb-6 text-xl text-gray-700">Final Question: Who loves who more?</p>
         <button class="trivia-btn" onclick="wrongAnswer(this)">You love Aditya more</button>
         <!-- Notice this now goes to 'screen-video5' instead of final -->
-        <button class="trivia-btn" onclick="nextScreen('screen-quiz6', 'screen-video5')">Aditya loves you more ❤️</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz6', 'screen-video5')">Aditya loves you more ❤️</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">We love each other equally</button>
+    </div>
+
+    <!-- NEW: Celebration Screen -->
+    <div id="screen-celebration" class="screen">
+        <h1 class="text-5xl md:text-6xl drop-shadow-sm mb-4" style="color: #2ed573;">Hurrah! 🎉</h1>
+        <p class="text-xl text-gray-700 mb-6 font-medium">You got the right answer! Amazing!</p>
+        <button class="btn-primary mt-6" onclick="endCelebration()">Show me the next surprise 🎁</button>
     </div>
 
     <!-- Video Screen 1 -->
@@ -451,30 +511,119 @@
 
     <script>
         let activeInterval; // Used to clear intervals when changing screens
+        let currentCelebrationTarget = ""; // Store where to go after celebration
+        let hasStartedMainMusic = false; // Track if Duniyaa has started
 
-        function startGame() {
-            const music = document.getElementById('bg-music');
-            music.play().catch(e => console.log("Audio autoplay blocked, will rely on controls."));
+        // NEW: Handle the initial tap to bypass autoplay restrictions
+        function startBirthdaySurprise() {
+            // Move to intro video screen
+            document.getElementById('screen-start-gate').classList.remove('active');
+            document.getElementById('screen-intro-video').classList.add('active');
             
-            // Sync final audio controls with the background audio
-            const finalPlayer = document.getElementById('final-audio-controls');
-            finalPlayer.onplay = () => music.play();
-            finalPlayer.onpause = () => music.pause();
-            finalPlayer.onvolumechange = () => music.volume = finalPlayer.volume;
-
-            nextScreen('screen-welcome', 'screen-game1');
+            // Attempt to auto-play the video
+            const video = document.getElementById('intro-video-element');
+            if (video) {
+                video.play().catch(e => console.log("Video autoplay blocked."));
+            }
         }
 
-        function nextScreen(currentId, nextId) {
-            if(activeInterval) clearInterval(activeInterval); // Cleanup intervals
+        // NEW: Transition from Intro Video to Welcome Screen
+        function transitionToWelcome() {
+            // Stop intro video
+            const video = document.getElementById('intro-video-element');
+            if (video) video.pause();
+            
+            // Move to welcome screen
+            nextScreen('screen-intro-video', 'screen-welcome');
+        }
 
-            document.getElementById(currentId).classList.remove('active');
-            document.getElementById(nextId).classList.add('active');
-            window.scrollTo(0, 0);
+        function showCelebration(currentId, nextId) {
+            currentCelebrationTarget = nextId;
+            nextScreen(currentId, 'screen-celebration');
+            
+            // Play Hurrah sound
+            const hurrah = document.getElementById('hurrah-audio');
+            hurrah.currentTime = 0;
+            hurrah.play().catch(e => console.log("Hurrah audio blocked"));
+            
+            // Launch firecrackers effect
+            launchFirecrackers();
+        }
 
-            // Initialize respective game logic when the screen loads
+        function endCelebration() {
+            // Stop hurrah sound when moving to the video
+            document.getElementById('hurrah-audio').pause();
+            nextScreen('screen-celebration', currentCelebrationTarget);
+        }
+
+        function launchFirecrackers() {
+            let count = 0;
+            const interval = setInterval(() => {
+                createFirework(
+                    window.innerWidth * 0.2 + Math.random() * window.innerWidth * 0.6,
+                    window.innerHeight * 0.2 + Math.random() * window.innerHeight * 0.4
+                );
+                count++;
+                if(count > 12) clearInterval(interval);
+            }, 250);
+        }
+
+        function createFirework(x, y) {
+            const colors = ['#ff4757', '#ffa502', '#2ed573', '#1e90ff', '#ff6348', '#eccc68', '#ff7f50', '#a29bfe'];
+            for (let i = 0; i < 40; i++) {
+                const particle = document.createElement('div');
+                particle.style.position = 'fixed';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.width = (Math.random() * 6 + 4) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.borderRadius = '50%';
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.pointerEvents = 'none';
+                particle.style.zIndex = '9999';
+                document.body.appendChild(particle);
+
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 50 + Math.random() * 150;
+                const tx = Math.cos(angle) * velocity;
+                const ty = Math.sin(angle) * velocity;
+
+                particle.animate([
+                    { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+                    { transform: `translate(${tx}px, ${ty}px) scale(0)`, opacity: 0 }
+            ], {
+                duration: 800 + Math.random() * 400,
+                easing: 'cubic-bezier(0, .9, .57, 1)'
+            }).onfinish = () => particle.remove();
+        }
+    }
+
+    function startGame() {
+        const music = document.getElementById('bg-music');
+        music.play().catch(e => console.log("Audio autoplay blocked, will rely on controls."));
+        hasStartedMainMusic = true;
+        
+        // Sync final audio controls with the background audio
+        const finalPlayer = document.getElementById('final-audio-controls');
+        finalPlayer.onplay = () => music.play();
+        finalPlayer.onpause = () => music.pause();
+        finalPlayer.onvolumechange = () => music.volume = finalPlayer.volume;
+
+        nextScreen('screen-welcome', 'screen-game1');
+    }
+
+    function nextScreen(currentId, nextId) {
+        if(activeInterval) clearInterval(activeInterval); // Cleanup intervals
+
+        document.getElementById(currentId).classList.remove('active');
+        document.getElementById(nextId).classList.add('active');
+        window.scrollTo(0, 0);
+
+        // Initialize respective game logic when the screen loads
         if(nextId === 'screen-game1') initMemoryGame();
         if(nextId === 'screen-game2') initCatchGame();
+        if(nextId === 'screen-game3') initHeartbeatGame();
+        if(nextId === 'screen-game5') initSimonGame();
         if(nextId === 'screen-game6') initBalloonGame();
 
         // Handle Video and Music Playback Logic
@@ -488,15 +637,18 @@
             document.getElementById('final-audio-controls').pause();
         }
 
-        if (nextId.startsWith('screen-video') || nextId === 'screen-epilogue') {
-            // Pause background music so she can hear the video
-            bgMusic.pause();
-            // Play the video for this specific screen automatically
-            const video = document.getElementById(nextId).querySelector('video');
-            if (video) video.play().catch(e => console.log("Video autoplay blocked by browser."));
-        } else if (nextId !== 'screen-welcome') {
-            // Resume the background music
-            bgMusic.play().catch(e => console.log("Audio resume blocked."));
+        // Only manage the main background music if we have started the journey
+        if (hasStartedMainMusic) {
+            if (nextId.startsWith('screen-video') || nextId === 'screen-epilogue') {
+                // Pause background music so she can hear the video
+                bgMusic.pause();
+                // Play the video for this specific screen automatically
+                const video = document.getElementById(nextId).querySelector('video');
+                if (video) video.play().catch(e => console.log("Video autoplay blocked by browser."));
+            } else if (nextId !== 'screen-welcome' && nextId !== 'screen-start-gate' && nextId !== 'screen-intro-video') {
+                // Resume the background music
+                bgMusic.play().catch(e => console.log("Audio resume blocked."));
+            }
         }
     }
 
@@ -599,18 +751,52 @@
             }, 700); 
         }
 
-        let itemsFound = 0;
-        function findItem(element) {
-            element.style.transform = 'scale(0)';
-            setTimeout(() => element.style.display = 'none', 200);
-            itemsFound++;
-            document.getElementById('scavenger-score').innerText = itemsFound;
-            
-            if (itemsFound >= 3) {
-                setTimeout(() => nextScreen('screen-game3', 'screen-quiz3'), 800);
+        // --- NEW GAME 3: HEARTBEAT SYNC ---
+        let syncScore = 0;
+        let heartPos = 0; // percentage
+        let heartDir = 1;
+        
+        function initHeartbeatGame() {
+            syncScore = 0;
+            heartPos = 0;
+            heartDir = 1;
+            document.getElementById('sync-score').innerText = syncScore;
+            startHeartbeat(45); // Slower initial speed
+        }
+        
+        function startHeartbeat(speed) {
+            if(activeInterval) clearInterval(activeInterval);
+            const heart = document.getElementById('hb-heart');
+            activeInterval = setInterval(() => {
+                heartPos += 2.5 * heartDir; // Slower movement
+                if(heartPos >= 90) heartDir = -1; 
+                if(heartPos <= 0) heartDir = 1;
+                heart.style.left = heartPos + '%';
+            }, speed);
+        }
+        
+        function checkSync() {
+            // Target box is now much wider: between 25% and 70%
+            if(heartPos >= 25 && heartPos <= 70) {
+                syncScore++;
+                document.getElementById('sync-score').innerText = syncScore;
+                
+                if(syncScore >= 3) {
+                    clearInterval(activeInterval);
+                    setTimeout(() => nextScreen('screen-game3', 'screen-quiz3'), 400);
+                } else {
+                    // Make it only slightly faster
+                    let newSpeed = 45 - (syncScore * 4); 
+                    startHeartbeat(newSpeed);
+                }
+            } else {
+                // NO PENALTY! Just shake to let her know she missed
+                document.getElementById('hb-wrap').classList.add('shake');
+                setTimeout(() => document.getElementById('hb-wrap').classList.remove('shake'), 300);
             }
         }
 
+        // --- GAME 4: CATCH KISS ---
         function dodgeKiss() {
             const btn = document.getElementById('catch-kiss-btn');
             const newTop = Math.random() * 60 + 10;
@@ -622,19 +808,117 @@
             nextScreen('screen-game4', 'screen-quiz4');
         }
 
-        function checkScramble() {
-            const input = document.getElementById('scramble-input').value.trim().toUpperCase();
-            const err = document.getElementById('scramble-error');
-            if(input === 'LOVE') {
-                err.classList.add('hidden');
-                nextScreen('screen-game5', 'screen-quiz5');
-            } else {
-                err.classList.remove('hidden');
-                document.getElementById('scramble-input').classList.add('shake');
-                setTimeout(() => document.getElementById('scramble-input').classList.remove('shake'), 300);
+        // --- NEW GAME 5: CUPID'S SEQUENCE (SIMON SAYS) ---
+        let simonSeq = [];
+        let playerSeq = [];
+        let simonLvl = 1;
+        let simonPlaying = false;
+        let simonTimeouts = [];
+
+        function clearSimonTimeouts() {
+            simonTimeouts.forEach(t => clearTimeout(t));
+            simonTimeouts = [];
+        }
+
+        function updateSimonStatus(msg, color) {
+            const status = document.getElementById('simon-status');
+            status.innerText = msg;
+            status.style.color = color;
+        }
+
+        function initSimonGame() {
+            clearSimonTimeouts();
+            simonSeq = [];
+            playerSeq = [];
+            simonLvl = 1;
+            simonPlaying = false;
+            document.getElementById('simon-level').innerText = simonLvl;
+            updateSimonStatus("Press Start to begin!", "#8e44ad");
+            
+            const startBtn = document.getElementById('simon-start-btn');
+            startBtn.style.display = 'inline-block';
+            startBtn.innerText = 'Start Sequence';
+            
+            for(let i=0; i<8; i++) {
+                document.getElementById('simon-'+i).classList.remove('simon-lit');
             }
         }
 
+        function startSimon() {
+            document.getElementById('simon-start-btn').style.display = 'none';
+            playerSeq = [];
+            simonSeq.push(Math.floor(Math.random() * 8));
+            playSimon();
+        }
+
+        function playSimon() {
+            simonPlaying = true; // Lock taps while showing sequence
+            clearSimonTimeouts();
+            updateSimonStatus("Watch carefully...", "#e74c3c");
+            
+            let i = 0;
+            function nextLight() {
+                if (i >= simonSeq.length) return;
+                lightUp(simonSeq[i]);
+                i++;
+                if(i < simonSeq.length) {
+                    simonTimeouts.push(setTimeout(nextLight, 900)); 
+                } else {
+                    simonTimeouts.push(setTimeout(() => { 
+                        simonPlaying = false; // Unlock! Safe to tap now.
+                        updateSimonStatus("Your turn! Repeat the pattern.", "#27ae60");
+                    }, 500));
+                }
+            }
+            simonTimeouts.push(setTimeout(nextLight, 600)); 
+        }
+
+        function lightUp(idx) {
+            const btn = document.getElementById('simon-' + idx);
+            if(btn) {
+                btn.classList.add('simon-lit');
+                setTimeout(() => btn.classList.remove('simon-lit'), 500); 
+            }
+        }
+
+        function tapSimon(idx) {
+            if(simonPlaying) return; // Ignore clicks if it's not their turn
+            
+            lightUp(idx);
+            playerSeq.push(idx);
+            
+            const currentIdx = playerSeq.length - 1;
+            
+            if(playerSeq[currentIdx] !== simonSeq[currentIdx]) {
+                simonPlaying = true; // Lock immediately
+                updateSimonStatus("Oops! Watch the pattern again...", "#e74c3c");
+                
+                document.getElementById('simon-grid-container').classList.add('shake');
+                setTimeout(() => document.getElementById('simon-grid-container').classList.remove('shake'), 400);
+                
+                playerSeq = [];
+                simonTimeouts.push(setTimeout(() => {
+                    playSimon();
+                }, 1200));
+                
+            } else if (playerSeq.length === simonSeq.length) {
+                simonPlaying = true; // Lock immediately to prevent double taps
+                updateSimonStatus("Correct! Next level...", "#2980b9");
+                
+                if(simonLvl === 5) {
+                    updateSimonStatus("You did it! Moving on...", "#27ae60");
+                    setTimeout(() => nextScreen('screen-game5', 'screen-quiz5'), 1200);
+                } else {
+                    simonLvl++;
+                    setTimeout(() => {
+                        document.getElementById('simon-level').innerText = simonLvl;
+                        startSimon();
+                    }, 1200);
+                }
+            }
+        }
+
+        // --- GAME 6: POP BALLOONS ---
         let balloonsPopped = 0;
         function initBalloonGame() {
             const area = document.getElementById('balloon-area');
@@ -689,6 +973,11 @@
             @keyframes floatUp { 
                 0% { transform: translateY(0) rotate(0deg); }
                 100% { transform: translateY(-120vh) rotate(360deg); } 
+            }
+            @keyframes pulse {
+                0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+                70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
+                100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
             }
         `;
         document.head.appendChild(styleSheet);
