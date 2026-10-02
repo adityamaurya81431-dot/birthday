@@ -207,7 +207,8 @@
 
     <div id="screen-welcome" class="screen">
         <h1>Welcome!</h1>
-        <p class="text-lg text-gray-700 mb-6 font-medium">BABBBYYYY..I made something special for you. But to unlock your gift, you have to complete our 12-step journey (6 games & 6 quizzes)! All the Bestttt</p>
+        <p class="text-lg text-gray-700 mb-4 font-medium">BABBBYYYY..I made something special for you. But to unlock your gift, you have to complete our 12-step journey (6 games & 6 quizzes)!</p>
+        <p class="text-lg text-pink-600 mb-6 font-bold italic">And here is the best part: after you complete each game and quiz, you'll unlock a cute and beautiful video of yours that I absolutely love! 🥺❤️ All the Bestttt!</p>
         <button class="btn-primary" onclick="startGame()">Start The Journey 💖</button>
     </div>
 
@@ -415,9 +416,32 @@
             </video>
         </div>
         
-        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Watch this before your final surprise...</p>
+        <p style="font-size: 1.1rem; color: #574b90; margin-bottom: 20px;">Watch this before your next surprise...</p>
         
-        <button class="btn-primary" onclick="nextScreen('screen-video5', 'screen-final')">See Your Final Gift 🎁</button>
+        <!-- 👇 Button changed to go to the new Dance screen 👇 -->
+        <button class="btn-primary" onclick="nextScreen('screen-video5', 'screen-video-dance')">I have something to tell you... ✨</button>
+    </div>
+
+    <!-- NEW: Single Spiritual Dance Video Screen -->
+    <div id="screen-video-dance" class="screen">
+        <h2 style="color: #ff4757; font-family: 'Dancing Script', cursive; font-size: 2.2rem; margin-bottom: 15px;">The Best Dancer in the World 💃</h2>
+        
+        <div class="message-box shadow-md" style="margin-bottom: 25px; border-left-color: #a29bfe;">
+            "Sunoooooo, tum bahut accha dance karti ho yaaar sach me bahut hi zyadaaa! I really love your moves, your facial expressions, and your movements... Mere liye , you are the best dancer in the world—my Miss India! ❤️"
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px; align-items: center;">
+            <!-- Spiritual Dance Video -->
+            <div style="width: 100%; max-width: 600px; border-radius: 15px; overflow: hidden; box-shadow: 0 10px 25px rgba(255, 105, 135, 0.3); border: 5px solid #fff;">
+                <video id="dance1" width="100%" controls playsinline>
+                    <!-- 🚨🚨 EDIT THE FILE NAME IN THE LINE BELOW 🚨🚨 -->
+                    <source src="Dance.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+        </div>
+        
+        <button class="btn-primary mt-6" onclick="nextScreen('screen-video-dance', 'screen-final')">See Your Final Gift 🎁</button>
     </div>
 
     <!-- Final Celebration Screen -->
