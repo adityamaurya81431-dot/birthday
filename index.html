@@ -169,6 +169,47 @@
         .simon-btn { height: 90px; border-radius: 20px; cursor: pointer; transition: transform 0.1s, box-shadow 0.1s, filter 0.1s; border: 4px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display:flex; justify-content:center; align-items:center; font-size:2.5rem; }
         .simon-btn:active { transform: scale(0.90); }
         .simon-lit { filter: brightness(1.5) contrast(1.2); box-shadow: 0 0 25px rgba(255,255,255,1); transform: scale(1.15); border-color: white !important; }
+        
+        /* NEW STYLES FOR FLOATING ASSISTANT */
+        .assistant-popup {
+            position: fixed;
+            bottom: -150px; /* Hidden by default */
+            right: 20px;
+            width: 250px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #ff4757;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            z-index: 9999;
+            transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            pointer-events: none; /* So she can click through it if it overlaps something */
+        }
+
+        .assistant-popup.show {
+            bottom: 20px;
+        }
+
+        .assistant-avatar {
+            font-size: 3rem;
+            margin-right: 15px;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            animation: bounceAvatar 2s infinite;
+        }
+
+        .assistant-text {
+            font-size: 0.95rem;
+            color: #574b90;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        @keyframes bounceAvatar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
     </style>
 </head>
 <body>
@@ -206,7 +247,7 @@
     </div>
 
     <div id="screen-welcome" class="screen">
-        <h1>Welcome!</h1>
+        <h1 style="font-size: 4.5rem; line-height: 1.2; margin-bottom: 25px; text-shadow: 3px 3px 6px rgba(255, 71, 87, 0.3);">WELCOME MISS INDIA</h1>
         <p class="text-lg text-gray-700 mb-4 font-medium">BABBBYYYY..I made something special for you. But to unlock your gift, you have to complete our 12-step journey (6 games & 6 quizzes)!</p>
         <p class="text-lg text-pink-600 mb-6 font-bold italic">And here is the best part: after you complete each game and quiz, you'll unlock a cute and beautiful video of yours that I absolutely love! 🥺❤️ All the Bestttt!</p>
         <button class="btn-primary" onclick="startGame()">Start The Journey 💖</button>
@@ -269,13 +310,18 @@
         <button class="trivia-btn" onclick="showCelebration('screen-quiz3', 'screen-video3')">Dadi chai bana rahi hongi ..peene jana hoga</button>
     </div>
 
-    <!-- Game 4: Catch the Kiss -->
+    <!-- Game 4: Cupid's Aim -->
     <div id="screen-game4" class="screen">
-        <h2>Game 4/6: Catch the Kiss</h2>
-        <p class="text-gray-600">Try to tap the kiss button! It's shy...</p>
-        <div class="interactive-area" style="border:none; background:rgba(255,255,255,0.3);">
-            <button id="catch-kiss-btn" class="btn-primary m-0" onmouseover="dodgeKiss()" ontouchstart="dodgeKiss()" onclick="winKissGame()">Catch Me! 💋</button>
+        <h2>Game 4/6: Cupid's Aim 🏹</h2>
+        <p class="text-gray-600 mb-2">You stole my heart, now let's see if you can hit it! Tap anywhere in the box to shoot your love arrows and hit the moving heart 3 times.</p>
+        
+        <div id="archery-container" style="position:relative; width: 100%; max-width:320px; height: 280px; margin: 20px auto; border-radius: 15px; overflow:hidden; box-shadow: 0 4px 15px rgba(255,105,135,0.2); border: 3px solid #ff9a9e; background: linear-gradient(to top, #ffeaa7, #fecfef); cursor: crosshair;" onmousedown="shootArrow(event)" ontouchstart="shootArrow(event)">
+            <div id="archery-target" style="position:absolute; top: 15px; left: 0%; font-size: 2.5rem; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.2)); z-index: 5;">❤️</div>
+            <div style="position:absolute; bottom: 10px; left: 50%; transform: translateX(-50%); font-size: 3rem; z-index: 5; pointer-events: none;">🏹</div>
         </div>
+        
+        <p class="font-bold text-pink-600 text-lg mt-2">Perfect Hits: <span id="archery-score">0</span>/3</p>
+        <button id="game4-next-btn" class="btn-primary mt-4" style="display:none; animation: fadeIn 0.5s ease-in;" onclick="nextScreen('screen-game4', 'screen-quiz4')">Next Quiz 💖</button>
     </div>
 
     <!-- Quiz 4 -->
@@ -323,21 +369,32 @@
         <button class="trivia-btn" onclick="wrongAnswer(this)">I don't know</button>
     </div>
 
-    <!-- Game 6: Pop Balloons -->
+    <!-- Game 6: Soulmate Scanner -->
     <div id="screen-game6" class="screen">
-        <h2>Game 6/6: Pop Balloons</h2>
-        <p class="text-gray-600">Tap 3 floating balloons as they rise!</p>
-        <p class="font-bold text-pink-600 text-lg mt-2">Popped: <span id="balloon-score">0</span>/3</p>
-        <div id="balloon-area" class="interactive-area"></div>
+        <h2>Game 6/6: Soulmate Scanner</h2>
+        <p class="text-gray-600 mb-6">Hold your thumb on the scanner continuously to verify your identity as Aditya's Miss India! ❤️</p>
+        
+        <div id="scanner-pad" style="position:relative; width: 160px; height: 160px; margin: 0 auto; border-radius: 50%; border: 4px dashed #ff9a9e; display: flex; justify-content: center; align-items: center; cursor: pointer; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; box-shadow: 0 0 20px rgba(255, 154, 158, 0.4); overflow: hidden;"
+             onmousedown="startScan(event)" onmouseup="stopScan(event)" onmouseleave="stopScan(event)"
+             ontouchstart="startScan(event)" ontouchend="stopScan(event)">
+            
+            <div id="scan-progress" style="position: absolute; bottom: 0; left: 0; width: 100%; height: 0%; background: rgba(255, 71, 87, 0.4); transition: height 0.1s linear;"></div>
+            <span style="font-size: 5rem; z-index: 2; pointer-events: none; filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));">👆</span>
+        </div>
+        
+        <p class="font-bold text-lg mt-6" id="scan-status" style="color: #ff4757;">Awaiting scan...</p>
+        <div style="width: 80%; height: 25px; background: rgba(255, 154, 158, 0.2); border-radius: 15px; margin: 15px auto; overflow: hidden; border: 2px solid #ff9a9e;">
+            <div id="scan-bar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ff9a9e, #ff4757); transition: width 0.1s linear;"></div>
+        </div>
     </div>
 
     <!-- Quiz 6 -->
     <div id="screen-quiz6" class="screen">
         <h2>Quiz 6/6</h2>
         <p class="mb-6 text-xl text-gray-700">Final Question: Who loves who more?</p>
-        <button class="trivia-btn" onclick="wrongAnswer(this)">You love Aditya more</button>
+        <button class="trivia-btn" onclick="showCelebration('screen-quiz6', 'screen-video5')">You love Aditya more</button>
         <!-- Notice this now goes to 'screen-video5' instead of final -->
-        <button class="trivia-btn" onclick="showCelebration('screen-quiz6', 'screen-video5')">Aditya loves you more ❤️</button>
+        <button class="trivia-btn" onclick="wrongAnswer(this)">Aditya loves you more ❤️</button>
         <button class="trivia-btn" onclick="wrongAnswer(this)">We love each other equally</button>
     </div>
 
@@ -345,7 +402,7 @@
     <div id="screen-celebration" class="screen">
         <h1 class="text-5xl md:text-6xl drop-shadow-sm mb-4" style="color: #2ed573;">Hurrah! 🎉</h1>
         <p class="text-xl text-gray-700 mb-6 font-medium">You got the right answer! Amazing!</p>
-        <button class="btn-primary mt-6" onclick="endCelebration()">Show me the next surprise 🎁</button>
+        <button id="celebration-btn" class="btn-primary mt-6" onclick="endCelebration()">SHOW ME THE VIDEO 🎬</button>
     </div>
 
     <!-- Video Screen 1 -->
@@ -533,6 +590,12 @@
         </div>
     </div>
 
+    <!-- NEW: Floating Assistant Popup -->
+    <div id="virtual-assistant" class="assistant-popup">
+        <div class="assistant-avatar">👦🏻</div>
+        <div id="assistant-message" class="assistant-text">I love you babby! Muahh! 💋</div>
+    </div>
+
     <script>
         let activeInterval; // Used to clear intervals when changing screens
         let currentCelebrationTarget = ""; // Store where to go after celebration
@@ -563,6 +626,15 @@
 
         function showCelebration(currentId, nextId) {
             currentCelebrationTarget = nextId;
+            
+            // Dynamically change button text depending on what comes next!
+            const celebBtn = document.getElementById('celebration-btn');
+            if(nextId.includes('video')) {
+                celebBtn.innerText = "SHOW ME THE VIDEO 🎬";
+            } else {
+                celebBtn.innerText = "Show me the next challenge 🎯";
+            }
+            
             nextScreen(currentId, 'screen-celebration');
             
             // Play Hurrah sound
@@ -647,8 +719,9 @@
         if(nextId === 'screen-game1') initMemoryGame();
         if(nextId === 'screen-game2') initCatchGame();
         if(nextId === 'screen-game3') initHeartbeatGame();
+        if(nextId === 'screen-game4') initArcheryGame();
         if(nextId === 'screen-game5') initSimonGame();
-        if(nextId === 'screen-game6') initBalloonGame();
+        if(nextId === 'screen-game6') initScannerGame();
 
         // Handle Video and Music Playback Logic
         const bgMusic = document.getElementById('bg-music');
@@ -820,158 +893,282 @@
             }
         }
 
-        // --- GAME 4: CATCH KISS ---
-        function dodgeKiss() {
-            const btn = document.getElementById('catch-kiss-btn');
-            const newTop = Math.random() * 60 + 10;
-            const newLeft = Math.random() * 60 + 10;
-            btn.style.top = newTop + '%';
-            btn.style.left = newLeft + '%';
-        }
-        function winKissGame() {
-            nextScreen('screen-game4', 'screen-quiz4');
-        }
+        // --- NEW GAME 4: CUPID'S AIM ---
+        let archeryScore = 0;
+        let archeryTargetPos = 0; // percentage
+        let archeryTargetDir = 1;
+        let archerySpeed = 1.2;
+        let archeryLoop;
+        let game4Won = false;
 
-        // --- NEW GAME 5: CUPID'S SEQUENCE (SIMON SAYS) ---
-        let simonSeq = [];
-        let playerSeq = [];
-        let simonLvl = 1;
-        let simonPlaying = false;
-        let simonTimeouts = [];
-
-        function clearSimonTimeouts() {
-            simonTimeouts.forEach(t => clearTimeout(t));
-            simonTimeouts = [];
-        }
-
-        function updateSimonStatus(msg, color) {
-            const status = document.getElementById('simon-status');
-            status.innerText = msg;
-            status.style.color = color;
-        }
-
-        function initSimonGame() {
-            clearSimonTimeouts();
-            simonSeq = [];
-            playerSeq = [];
-            simonLvl = 1;
-            simonPlaying = false;
-            document.getElementById('simon-level').innerText = simonLvl;
-            updateSimonStatus("Press Start to begin!", "#8e44ad");
+        function initArcheryGame() {
+            archeryScore = 0;
+            archeryTargetPos = 0;
+            archeryTargetDir = 1;
+            archerySpeed = 1.2;
+            game4Won = false;
             
-            const startBtn = document.getElementById('simon-start-btn');
-            startBtn.style.display = 'inline-block';
-            startBtn.innerText = 'Start Sequence';
+            document.getElementById('archery-score').innerText = '0';
+            document.getElementById('game4-next-btn').style.display = 'none';
+            document.getElementById('archery-target').innerText = '❤️';
             
-            for(let i=0; i<8; i++) {
-                document.getElementById('simon-'+i).classList.remove('simon-lit');
+            // Clear any old arrows
+            const container = document.getElementById('archery-container');
+            const oldArrows = container.querySelectorAll('.player-arrow');
+            oldArrows.forEach(a => a.remove());
+
+            if(archeryLoop) clearInterval(archeryLoop);
+            archeryLoop = setInterval(() => {
+                if(game4Won) return;
+                archeryTargetPos += archerySpeed * archeryTargetDir;
+                if(archeryTargetPos >= 80) archeryTargetDir = -1; 
+                if(archeryTargetPos <= 0) archeryTargetDir = 1;
+                document.getElementById('archery-target').style.left = archeryTargetPos + '%';
+            }, 20);
+        }
+
+        function shootArrow(e) {
+            if(e) e.preventDefault(); // Prevent screen scroll when tapping fast
+            if(game4Won) return;
+
+            const container = document.getElementById('archery-container');
+            const arrow = document.createElement('div');
+            arrow.innerText = '💘';
+            arrow.className = 'player-arrow';
+            arrow.style.position = 'absolute';
+            arrow.style.left = '50%';
+            arrow.style.transform = 'translateX(-50%)';
+            arrow.style.bottom = '50px';
+            arrow.style.fontSize = '2rem';
+            arrow.style.zIndex = '4';
+            arrow.style.transition = 'bottom 0.4s linear'; 
+            container.appendChild(arrow);
+
+            // Small delay to allow CSS transition to trigger
+            setTimeout(() => {
+                arrow.style.bottom = '120%'; 
+            }, 10);
+
+            // Check for collision while arrow flies
+            let checkHit = setInterval(() => {
+                let target = document.getElementById('archery-target');
+                let targetRect = target.getBoundingClientRect();
+                let arrowRect = arrow.getBoundingClientRect();
+                
+                // If arrow flies out of bounds, clear
+                if (arrowRect.bottom < container.getBoundingClientRect().top) {
+                    clearInterval(checkHit);
+                    if(arrow.parentNode) arrow.remove();
+                }
+
+                // Did the arrow hit the heart?
+                if (!(arrowRect.right < targetRect.left || 
+                      arrowRect.left > targetRect.right || 
+                      arrowRect.bottom < targetRect.top || 
+                      arrowRect.top > targetRect.bottom)) {
+                    
+                    // Hit!
+                    clearInterval(checkHit);
+                    if(arrow.parentNode) arrow.remove();
+                    processHit(target);
+                }
+            }, 20);
+        }
+
+        function processHit(target) {
+            archeryScore++;
+            document.getElementById('archery-score').innerText = archeryScore;
+            
+            // Explosion visual
+            target.innerText = '💥';
+            target.classList.add('shake');
+            setTimeout(() => { 
+                if(!game4Won) target.innerText = '❤️'; 
+                target.classList.remove('shake'); 
+            }, 300);
+            
+            // Make the heart move faster after every hit!
+            archerySpeed += 0.8; 
+
+            if(archeryScore >= 3) {
+                game4Won = true;
+                target.innerText = '💖✨';
+                clearInterval(archeryLoop);
+                
+                const rect = document.getElementById('archery-container').getBoundingClientRect();
+                createFirework(rect.left + rect.width/2, rect.top + rect.height/2);
+                
+                setTimeout(() => {
+                    document.getElementById('game4-next-btn').style.display = 'inline-block';
+                }, 800);
             }
+        }
+
+        // --- GAME 5: CUPID'S SEQUENCE (Restored logic) ---
+        let simonSequence = [];
+        let simonPlayerSequence = [];
+        let simonLevel = 1;
+        const maxLevel = 5;
+        let isSimonPlaying = false;
+        
+        function initSimonGame() {
+            simonSequence = [];
+            simonPlayerSequence = [];
+            simonLevel = 1;
+            isSimonPlaying = false;
+            document.getElementById('simon-level').innerText = simonLevel;
+            document.getElementById('simon-status').innerText = 'Press Start to begin!';
+            document.getElementById('simon-status').style.color = '#8e44ad';
+            document.getElementById('simon-start-btn').style.display = 'inline-block';
         }
 
         function startSimon() {
             document.getElementById('simon-start-btn').style.display = 'none';
-            playerSeq = [];
-            simonSeq.push(Math.floor(Math.random() * 8));
-            playSimon();
+            simonSequence = [];
+            simonLevel = 1;
+            nextSimonRound();
         }
 
-        function playSimon() {
-            simonPlaying = true; // Lock taps while showing sequence
-            clearSimonTimeouts();
-            updateSimonStatus("Watch carefully...", "#e74c3c");
+        function nextSimonRound() {
+            document.getElementById('simon-level').innerText = simonLevel;
+            document.getElementById('simon-status').innerText = 'Watch carefully... 👀';
+            document.getElementById('simon-status').style.color = '#e17055';
+            simonPlayerSequence = [];
+            isSimonPlaying = true;
             
+            simonSequence.push(Math.floor(Math.random() * 8));
+            playSimonSequence();
+        }
+
+        function playSimonSequence() {
             let i = 0;
-            function nextLight() {
-                if (i >= simonSeq.length) return;
-                lightUp(simonSeq[i]);
-                i++;
-                if(i < simonSeq.length) {
-                    simonTimeouts.push(setTimeout(nextLight, 900)); 
-                } else {
-                    simonTimeouts.push(setTimeout(() => { 
-                        simonPlaying = false; // Unlock! Safe to tap now.
-                        updateSimonStatus("Your turn! Repeat the pattern.", "#27ae60");
-                    }, 500));
-                }
-            }
-            simonTimeouts.push(setTimeout(nextLight, 600)); 
-        }
-
-        function lightUp(idx) {
-            const btn = document.getElementById('simon-' + idx);
-            if(btn) {
+            const interval = setInterval(() => {
+                const heartId = simonSequence[i];
+                const btn = document.getElementById('simon-' + heartId);
+                
                 btn.classList.add('simon-lit');
-                setTimeout(() => btn.classList.remove('simon-lit'), 500); 
-            }
+                setTimeout(() => btn.classList.remove('simon-lit'), 400);
+                
+                i++;
+                if(i >= simonSequence.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        isSimonPlaying = false;
+                        document.getElementById('simon-status').innerText = 'Your turn! Repeat the pattern. 👈';
+                        document.getElementById('simon-status').style.color = '#2ed573';
+                    }, 500);
+                }
+            }, 800);
         }
 
-        function tapSimon(idx) {
-            if(simonPlaying) return; // Ignore clicks if it's not their turn
+        function tapSimon(id) {
+            if(isSimonPlaying) return;
             
-            lightUp(idx);
-            playerSeq.push(idx);
+            const btn = document.getElementById('simon-' + id);
+            btn.classList.add('simon-lit');
+            setTimeout(() => btn.classList.remove('simon-lit'), 200);
             
-            const currentIdx = playerSeq.length - 1;
+            simonPlayerSequence.push(id);
             
-            if(playerSeq[currentIdx] !== simonSeq[currentIdx]) {
-                simonPlaying = true; // Lock immediately
-                updateSimonStatus("Oops! Watch the pattern again...", "#e74c3c");
-                
+            const currentIndex = simonPlayerSequence.length - 1;
+            if(simonPlayerSequence[currentIndex] !== simonSequence[currentIndex]) {
+                isSimonPlaying = true;
+                document.getElementById('simon-status').innerText = 'Oops! Watch it one more time... 🔄';
+                document.getElementById('simon-status').style.color = '#e74c3c';
                 document.getElementById('simon-grid-container').classList.add('shake');
-                setTimeout(() => document.getElementById('simon-grid-container').classList.remove('shake'), 400);
+                setTimeout(() => document.getElementById('simon-grid-container').classList.remove('shake'), 300);
                 
-                playerSeq = [];
-                simonTimeouts.push(setTimeout(() => {
-                    playSimon();
-                }, 1200));
-                
-            } else if (playerSeq.length === simonSeq.length) {
-                simonPlaying = true; // Lock immediately to prevent double taps
-                updateSimonStatus("Correct! Next level...", "#2980b9");
-                
-                if(simonLvl === 5) {
-                    updateSimonStatus("You did it! Moving on...", "#27ae60");
-                    setTimeout(() => nextScreen('screen-game5', 'screen-quiz5'), 1200);
+                setTimeout(() => {
+                    simonPlayerSequence = [];
+                    playSimonSequence();
+                }, 1500);
+                return;
+            }
+            
+            if(simonPlayerSequence.length === simonSequence.length) {
+                isSimonPlaying = true;
+                if(simonLevel === maxLevel) {
+                    document.getElementById('simon-status').innerText = 'Perfect memory! Miss India wins! 🎉';
+                    document.getElementById('simon-status').style.color = '#ff4757';
+                    
+                    const rect = document.getElementById('simon-grid-container').getBoundingClientRect();
+                    createFirework(rect.left + rect.width/2, rect.top + rect.height/2);
+                    
+                    setTimeout(() => nextScreen('screen-game5', 'screen-quiz5'), 1500);
                 } else {
-                    simonLvl++;
-                    setTimeout(() => {
-                        document.getElementById('simon-level').innerText = simonLvl;
-                        startSimon();
-                    }, 1200);
+                    simonLevel++;
+                    document.getElementById('simon-status').innerText = 'Great job! Get ready... ✨';
+                    document.getElementById('simon-status').style.color = '#0984e3';
+                    setTimeout(nextSimonRound, 1200);
                 }
             }
         }
 
-        // --- GAME 6: POP BALLOONS ---
-        let balloonsPopped = 0;
-        function initBalloonGame() {
-            const area = document.getElementById('balloon-area');
-            balloonsPopped = 0;
-            document.getElementById('balloon-score').innerText = balloonsPopped;
+        // --- NEW GAME 6: SOULMATE SCANNER ---
+        let scanInterval;
+        let scanProgress = 0;
+        let isScanning = false;
+
+        function initScannerGame() {
+            scanProgress = 0;
+            isScanning = false;
+            document.getElementById('scan-progress').style.height = '0%';
+            document.getElementById('scan-bar').style.width = '0%';
+            document.getElementById('scan-status').innerText = 'Awaiting scan...';
+            document.getElementById('scan-status').style.color = '#ff4757';
+            document.getElementById('scanner-pad').classList.remove('pulse-fast');
+            clearInterval(scanInterval);
+        }
+
+        function startScan(e) {
+            // Prevent default behavior so long-press doesn't open the mobile context menu
+            if(e) { e.preventDefault(); e.stopPropagation(); }
             
-            activeInterval = setInterval(() => {
-                const balloon = document.createElement('div');
-                balloon.classList.add('floating-item');
-                balloon.innerText = '🎈';
-                balloon.style.left = Math.random() * 85 + '%';
-                balloon.style.bottom = '-50px';
+            if(scanProgress >= 100) return;
+            isScanning = true;
+            document.getElementById('scan-status').innerText = 'Scanning aura... keep holding! ✨';
+            document.getElementById('scan-status').style.color = '#8e44ad';
+            document.getElementById('scanner-pad').classList.add('pulse-fast');
+            
+            clearInterval(scanInterval);
+            scanInterval = setInterval(() => {
+                if(!isScanning) return;
+                scanProgress += 2.5; // Takes 4 seconds to reach 100%
+                document.getElementById('scan-progress').style.height = scanProgress + '%';
+                document.getElementById('scan-bar').style.width = scanProgress + '%';
                 
-                balloon.onclick = function() {
-                    this.innerText = '💥';
-                    setTimeout(() => this.remove(), 150);
-                    balloonsPopped++;
-                    document.getElementById('balloon-score').innerText = balloonsPopped;
-                    if(balloonsPopped >= 3) {
-                        clearInterval(activeInterval);
-                        area.innerHTML = '';
-                        setTimeout(() => nextScreen('screen-game6', 'screen-quiz6'), 500);
+                if(scanProgress >= 100) {
+                    clearInterval(scanInterval);
+                    isScanning = false;
+                    document.getElementById('scan-status').innerText = '100% Match: Miss India Verified! 💖';
+                    document.getElementById('scan-status').style.color = '#2ed573';
+                    document.getElementById('scanner-pad').classList.remove('pulse-fast');
+                    
+                    // Trigger immediate celebration fireworks just for this game
+                    for(let i=0; i<8; i++) {
+                        setTimeout(() => createFirework(window.innerWidth * 0.2 + Math.random() * window.innerWidth * 0.6, window.innerHeight * 0.2 + Math.random() * window.innerHeight * 0.4), i*150);
                     }
-                };
-                area.appendChild(balloon);
-                
-                setTimeout(() => { if (balloon) balloon.style.bottom = '300px'; }, 50);
-                setTimeout(() => { if(balloon.parentElement) balloon.remove(); }, 3050);
-            }, 800); 
+                    
+                    setTimeout(() => nextScreen('screen-game6', 'screen-quiz6'), 1800);
+                }
+            }, 100);
+        }
+
+        function stopScan(e) {
+            if(e) { e.preventDefault(); e.stopPropagation(); }
+            if(scanProgress >= 100) return;
+            
+            isScanning = false;
+            clearInterval(scanInterval);
+            document.getElementById('scanner-pad').classList.remove('pulse-fast');
+            
+            if(scanProgress > 0) {
+                scanProgress = 0;
+                document.getElementById('scan-progress').style.height = '0%';
+                document.getElementById('scan-bar').style.width = '0%';
+                document.getElementById('scan-status').innerText = 'Scan failed! You must hold continuously! 🥺';
+                document.getElementById('scan-status').style.color = '#e74c3c';
+            }
         }
 
         function createBackgroundHeart() {
@@ -992,6 +1189,35 @@
 
         setInterval(createBackgroundHeart, 400);
 
+        // NEW: Floating Assistant Logic
+        const assistantMessages = [
+            "I love you babby! Muaaaah! 💋",
+            "I will marry you babbbyyy... 💍❤️",
+            "You are my whole world, Miss India! 🌍💖",
+            "Are you smiling? I hope you are smiling! 😘",
+            "Just popping in to say you look beautiful today! 🥰",
+            "My cutiepieeeee! 🥺❤️"
+        ];
+
+        function showAssistant() {
+            // Pick a random message
+            const randomMsg = assistantMessages[Math.floor(Math.random() * assistantMessages.length)];
+            document.getElementById('assistant-message').innerText = randomMsg;
+            
+            // Slide it in
+            const assistant = document.getElementById('virtual-assistant');
+            assistant.classList.add('show');
+            
+            // Slide it out after 4 seconds
+            setTimeout(() => {
+                assistant.classList.remove('show');
+            }, 4000);
+        }
+
+        // Only start showing the assistant AFTER the journey has actually started 
+        // We will start the interval inside the startGame() function below
+        let assistantInterval;
+
         const styleSheet = document.createElement('style');
         styleSheet.innerHTML = `
             @keyframes floatUp { 
@@ -1003,8 +1229,20 @@
                 70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 71, 87, 0); }
                 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
             }
+            .pulse-fast { animation: pulse 0.7s infinite !important; background: rgba(255, 154, 158, 0.2); }
         `;
         document.head.appendChild(styleSheet);
+        
+        // Modify existing startGame function to start the assistant interval
+        const originalStartGame = startGame;
+        startGame = function() {
+            originalStartGame(); // Call the original function to start music and change screen
+            
+            // Start the assistant popping up every 15 seconds (15000 milliseconds)
+            if(!assistantInterval) {
+                assistantInterval = setInterval(showAssistant, 15000);
+            }
+        };
     </script>
 </body>
 </html>
